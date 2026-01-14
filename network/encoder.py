@@ -69,6 +69,7 @@ class Encoder(nn.Module):
         if self.aggregation_method is not None:
             x=self.aggregation_method(x)
         x = self.patch_embed(x)
+
         self.pos_embed=self.pos_embed.to(x.device)
         if self.is_reconstruction:
             x = x + self.pos_embed[:, :]
@@ -77,7 +78,6 @@ class Encoder(nn.Module):
             x = x + self.pos_embed[:-1, :]
             cls = torch.repeat_interleave(self.cls_token + self.pos_embed[-1:, :], x.shape[0], 0)
             x = torch.cat([x, cls], dim=1)
-
         for blk in self.blocks:
             x = blk(x,self.attn_mask.to(x.device))
 

@@ -13,9 +13,11 @@ from model.stage_2 import Stage2
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(torch.cuda.is_available())
 
+
 def safe_save(state_dict, path):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     torch.save(state_dict, path)
+
 
 def fit(
         func_area: list = None,
@@ -47,7 +49,7 @@ def fit(
         loss_fn_1 = nn.CrossEntropyLoss()
         loss_fn_2 = nn.MSELoss()
 
-        epoch = 100
+        epoch = 1
         loss_res = 0
         for epo in range(epoch):
             loss_res = 0
@@ -74,7 +76,7 @@ def fit(
                 torch.cuda.empty_cache()
 
             safe_save(stage1_net.encoder.state_dict(),
-                      f"save_all/{mask_type}_{aggregation_type}/stage1_dict/best_dict_{sub}.pth")
+                      f"save_metric/{mask_type}&{aggregation_type}/stage1_dict/dict_{sub}.pth")
         print(f"Successfully saved stage1 parameters to stage1_dict.    loss:{loss_res}")
 
         stage2_dataset = SEEDVIG(dataset_name="stage2", normalize="minmax", subject_idx=sub, rand_list=random_list,
@@ -93,7 +95,7 @@ def fit(
                         aggregation_type=aggregation_type).to(device)
 
         stage1_dict = torch.load(
-            f"save_all/{mask_type}_{aggregation_type}/stage1_dict/best_dict_{sub}.pth")
+            f"save_metric/{mask_type}&{aggregation_type}/stage1_dict/dict_{sub}.pth")
         stage2.encoder.load_state_dict(stage1_dict)
 
         for parm in stage2.encoder.parameters():
@@ -101,7 +103,7 @@ def fit(
 
         optimizer = optim.Adam(filter(lambda p: p.requires_grad, stage2.parameters()), lr=0.005)
         loss_fn = nn.CrossEntropyLoss()
-        epoch = 50
+        epoch = 1
         best_metrics = (0, 0, 0, 0)
         for epo in range(epoch):
             loss_res = 0
@@ -145,7 +147,7 @@ def fit(
 
             best_metrics = (acc, prec, rec, f1)
         safe_save(stage2.state_dict(),
-                  f"save_all/{mask_type}_{aggregation_type}/best_dict/best_dict_{sub}.pth")
+                  f"save_metric/{mask_type}&{aggregation_type}/stage2_dict/dict_{sub}.pth")
 
         print(
             f"subject:{sub}   best_acc:{best_metrics[0]:.4f}  prec:{best_metrics[1]:.4f}  rec:{best_metrics[2]:.4f}  f1:{best_metrics[3]:.4f}  total_loss:{loss_res:.4f}")
@@ -164,22 +166,26 @@ def fit(
 
     return avg_acc, avg_prec, avg_rec, avg_f1
 
+# By modifying the following three parameters, you can change the number of Encoder and Decoder layers,
+# the masking method, and the aggregation method.
 def run(
+        depth=4,
         mask_type="node",
         aggregation_type="prototype-attention",
 ):
+    # The following code shows the default region partitioning method;
+    # other partitioning schemes can be implemented by modifying this line of code.
     func_area = [[0, 2, 4], [1, 3, 5], [6, 7], [8, 9, 10], [11, 12, 13], [14, 15, 16]]
     random_list = np.load("./random_list.npy").tolist()
 
     avg_acc, avg_prec, avg_rec, avg_f1 = fit(func_area=func_area, batch_size=128,
-                                                          depth=4,
-                                                          encoder_dim=16, num_heads=8,
-                                                          random_list=random_list,
-                                                          mask_type=mask_type,
-                                                          aggregation_type=aggregation_type)
+                                             depth=depth,
+                                             encoder_dim=16, num_heads=8,
+                                             random_list=random_list,
+                                             mask_type=mask_type,
+                                             aggregation_type=aggregation_type)
 
     print(f"avg_acc:{avg_acc}  avg_prec:{avg_prec}  avg_rec:{avg_rec}  avg_f1:{avg_f1}")
-
 
 if __name__ == "__main__":
     run()

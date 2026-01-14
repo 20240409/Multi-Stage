@@ -59,7 +59,7 @@ class Stage1(nn.Module):
 
     def forward(self, x):
         x = self.encoder(x)
-        y = self.pre_tune(x)
+        y = self.classifier(x)
         x = self.decoder(x)
 
         return [y, x]
