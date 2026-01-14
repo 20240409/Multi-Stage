@@ -48,14 +48,12 @@ class SEEDVIG(Dataset):
         label_path = file + "label_{}.mat"
         if self.dataset_name == "stage1":
             self.label_1 = self.data.transpose([0, 2, 1, 3])
-
             self.label_2 = np.array([
                 sio.loadmat(label_path.format(subject_idx))["de_labels"]
             ])
             self.label_2 = self.label_2[:, rand_list, :]
 
         region_data = self.build_region_nodes(self.data, self.func_areas)
-        
         region_data = region_data.transpose([0, 2, 1, 3])
         self.data = self.data.transpose([0, 2, 1, 3])
         
@@ -63,8 +61,6 @@ class SEEDVIG(Dataset):
             self.data = self.node_mask(self.data, mask_type=self.mask_type)
 
         self.data = np.concatenate([self.data, region_data], axis=2)
-        
-
         
         if self.dataset_name == "stage2" or self.dataset_name == "test":
             self.label = np.array([
