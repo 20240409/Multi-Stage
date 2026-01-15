@@ -3,7 +3,7 @@ This repository provides the implementation of our paper on EEG-based fatigue de
 <p align="center">
   <img src="figure/main_model.png" width="70%">
 </p>
-The figure above illustrates our proposed **two-stage EEG-based fatigue detection framework**. 
+The figure above illustrates our proposed two-stage EEG-based fatigue detection framework. 
 The model consists of two main stages:
 
 1. **Joint Pre-training Stage**  
