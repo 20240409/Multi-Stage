@@ -14,4 +14,5 @@ The model consists of two main stages:
    All encoder parameters are frozen, and only the classifier is optimized under labeled supervision.
 
 # requirements
-To install requirements:
+Python version is 3.9, to install requirements:
+`pip install -r requirements.txt`
