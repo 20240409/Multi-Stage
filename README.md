@@ -12,3 +12,6 @@ The model consists of two main stages:
 2. **Supervised Fine-tuning Stage**  
    In this stage, the pretrained encoder is transferred to a classification model consisting of the frozen encoder and a newly initialized classifier.
    All encoder parameters are frozen, and only the classifier is optimized under labeled supervision.
+
+# requirements
+To install requirements:
