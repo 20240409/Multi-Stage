@@ -58,14 +58,14 @@ def fit(
         rec = recall_score(y_true, y_pred, average='macro', zero_division=0)
         f1 = f1_score(y_true, y_pred, average='macro', zero_division=0)
 
-        best_metrics = (acc, prec, rec, f1)
+        metrics = (acc, prec, rec, f1)
 
-        print(f"subject:{sub}   best_acc:{best_metrics[0]}  prec:{best_metrics[1]}  rec:{best_metrics[2]}  f1:{best_metrics[3]}  total_loss:{loss_res}")
+        print(f"subject:{sub}   best_acc:{metrics[0]}  prec:{metrics[1]}  rec:{metrics[2]}  f1:{metrics[3]}  total_loss:{loss_res}")
 
-        all_acc.append(best_metrics[0])
-        all_prec.append(best_metrics[1])
-        all_rec.append(best_metrics[2])
-        all_f1.append(best_metrics[3])
+        all_acc.append(metrics[0])
+        all_prec.append(metrics[1])
+        all_rec.append(metrics[2])
+        all_f1.append(metrics[3])
 
     avg_acc = np.mean(all_acc)
     avg_prec = np.mean(all_prec)

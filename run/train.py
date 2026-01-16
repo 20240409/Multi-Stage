@@ -76,7 +76,7 @@ def fit(
                 torch.cuda.empty_cache()
 
             safe_save(stage1_net.encoder.state_dict(),
-                      f"save_metric/{mask_type}&{aggregation_type}/stage1_dict/dict_{sub}.pth")
+                      f"save_dict/{mask_type}&{aggregation_type}/stage1_dict/dict_{sub}.pth")
         print(f"Successfully saved stage1 parameters to stage1_dict.    loss:{loss_res}")
 
         stage2_dataset = SEEDVIG(dataset_name="stage2", normalize="minmax", subject_idx=sub, rand_list=random_list,
@@ -95,7 +95,7 @@ def fit(
                         aggregation_type=aggregation_type).to(device)
 
         stage1_dict = torch.load(
-            f"save_metric/{mask_type}&{aggregation_type}/stage1_dict/dict_{sub}.pth")
+            f"save_dict/{mask_type}&{aggregation_type}/stage1_dict/dict_{sub}.pth")
         stage2.encoder.load_state_dict(stage1_dict)
 
         for parm in stage2.encoder.parameters():
@@ -104,7 +104,7 @@ def fit(
         optimizer = optim.Adam(filter(lambda p: p.requires_grad, stage2.parameters()), lr=0.005)
         loss_fn = nn.CrossEntropyLoss()
         epoch = 1
-        best_metrics = (0, 0, 0, 0)
+        metrics = (0, 0, 0, 0)
         for epo in range(epoch):
             loss_res = 0
             correct = 0
@@ -145,17 +145,17 @@ def fit(
             rec = recall_score(y_true, y_pred, average='macro', zero_division=0)
             f1 = f1_score(y_true, y_pred, average='macro', zero_division=0)
 
-            best_metrics = (acc, prec, rec, f1)
+            metrics = (acc, prec, rec, f1)
         safe_save(stage2.state_dict(),
-                  f"save_metric/{mask_type}&{aggregation_type}/stage2_dict/dict_{sub}.pth")
+                  f"save_dict/{mask_type}&{aggregation_type}/stage2_dict/dict_{sub}.pth")
 
         print(
-            f"subject:{sub}   best_acc:{best_metrics[0]:.4f}  prec:{best_metrics[1]:.4f}  rec:{best_metrics[2]:.4f}  f1:{best_metrics[3]:.4f}  total_loss:{loss_res:.4f}")
+            f"subject:{sub}   acc:{metrics[0]:.4f}  prec:{metrics[1]:.4f}  rec:{metrics[2]:.4f}  f1:{metrics[3]:.4f}  total_loss:{loss_res:.4f}")
 
-        all_acc.append(best_metrics[0])
-        all_prec.append(best_metrics[1])
-        all_rec.append(best_metrics[2])
-        all_f1.append(best_metrics[3])
+        all_acc.append(metrics[0])
+        all_prec.append(metrics[1])
+        all_rec.append(metrics[2])
+        all_f1.append(metrics[3])
 
     avg_acc = np.mean(all_acc)
     avg_prec = np.mean(all_prec)
