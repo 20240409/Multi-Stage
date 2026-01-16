@@ -28,6 +28,7 @@ python dataset/DE.py
 The data will be organized as
 
 dataset/
+
 ├─ data/
 
 │  ├─ DE_0
@@ -37,7 +38,7 @@ dataset/
 │  ├─ ...
 
 │  ├─ DE_22
-
+      
 │  ├─ label_0
 
 │  ├─ label_1
