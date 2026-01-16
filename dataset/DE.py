@@ -10,7 +10,7 @@ frequency bands from the SEED-VIG dataset.
 if __name__ == "__main__":
     save_path = './data/'
 
-    data_path = "Your SEEDVIG dataset folder path\EEG_Feature_5Bands"# path to the raw SEED dataset
+    data_path = "Your SEEDVIG dataset folder path\EEG_Feature_5Bands"# path to the dataset
     data_names = glob.glob(os.path.join(data_path, '*.mat'))
     data_names.sort()
 
