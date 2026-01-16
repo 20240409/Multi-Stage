@@ -20,7 +20,7 @@ pip install -r requirements.txt
 ```
 
 # Datasets
-You can click[here](https://bcmi.sjtu.edu.cn/~seed/seed-vig.html) to download the SEED‑VIG dataset. Then, run the following code to store the DE features into the
+You can click [here](https://bcmi.sjtu.edu.cn/~seed/seed-vig.html) to download the SEED‑VIG dataset. Then, run the following code to store the DE features into the
 the `dataset/data` folder.
 ```bash
 python dataset/DE.py
@@ -29,13 +29,21 @@ The data will be organized as
 
 dataset/
 ├─ data/
+
 │  ├─ DE_0
+
 │  ├─ DE_1
+
 │  ├─ ...
+
 │  ├─ DE_22
+
 │  ├─ label_0
+
 │  ├─ label_1
+
 │  ├─ ...
+
 │  ├─ label_22
 
 Our self-Made dataset is not planned to be made public at this time.
