@@ -47,7 +47,7 @@ dataset/
 
 │  ├─ label_22
 
-Our self-Made dataset is not planned to be made public at this time.
+Our Self-Made dataset is not planned to be made public at this time.
 
 # Train And Test
 You can run the following code to train the model and modify the model configuration parameters in the code to evaluate its performance 
