@@ -64,10 +64,7 @@ def fit(
                 loss_1 = loss_fn_1(output[0], l[0])
                 loss_2 = loss_fn_2(output[1], l[1])
 
-                norm_loss1 = loss_1 / (loss_1.detach() + loss_2.detach())
-                norm_loss2 = loss_2 / (loss_1.detach() + loss_2.detach())
-
-                loss = norm_loss1 * loss_1 + norm_loss2 * loss_2
+                loss = 0.6 * loss_1 + 0.4 * loss_2
                 loss_res += loss
 
                 optimizer.zero_grad()
